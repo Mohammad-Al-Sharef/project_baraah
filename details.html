@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- FLATICON -->
+    <link rel="stylesheet"
+        href="https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+
+    <!-- sweetalert2 -->
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+    <!-- SWIPER CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="detail.css" />
+
+    <title>DigitalMart</title>
+</head>
+<style>
+
+    /* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  background-color: #f5f5f5; /* Light background */
+  color: #333;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: white;
+    color: #f5a623;
+    font-weight: bold;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 4px 8px #f5a623;
+    scroll-behavior: smooth;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.nav-links li {
+    margin: 0 15px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #f5a623;
+    font-weight: bold;
+    padding: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-links a:hover {
+    background-color: #f5a623;
+    color: white;
+    border-radius: 5px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    width: 70px;
+    margin-right: 30px;
+}
+
+.login-btn {
+    background-color: #f5a623;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+}
+.login-btn:hover {
+    background-color:#d4880f;
+}
+/* Details Section */
+.details {
+  margin: 100px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+}
+
+.details-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.details-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.details-img.main {
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.details-small-images {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.details-small-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 5px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.details-small-img:hover {
+  transform: scale(1.1);
+}
+
+.details-title {
+  font-size: 1.8rem;
+  color: #f5a623;
+}
+
+.details-brand {
+  font-size: 1rem;
+  margin: 10px 0;
+}
+
+.product-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.product-item {
+  position: relative;
+  width: 100px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.product-item:hover {
+  transform: translateY(-5px);
+}
+
+.product-item img {
+  width: 100%;
+}
+
+.product-price {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background-color: #64a5eb;
+  color: #fff;
+  padding: 2px 5px;
+  font-size: 0.8rem;
+  border-radius: 3px;
+}
+
+/* Product Features */
+.product-list {
+  list-style: none;
+  margin: 20px 0;
+  padding: 0;
+}
+
+.list-item {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.list-item i {
+  color: #f5a623;
+}
+
+.details-color, .details-size {
+  margin: 20px 0;
+}
+
+.color-list, .size-list {
+  list-style: none;
+  display: flex;
+  gap: 10px;
+}
+
+.color-link {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  cursor: pointer;
+}
+
+.color-link:hover {
+  border-color: #f5a623;
+}
+
+.size-link {
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.size-link:hover, .size-link.size-active {
+  background-color: #f5a623;
+  color: #fff;
+  border-color: #f5a623;
+}
+/* Button Style */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    background-color: #f5a623;  /* Button background color */
+    color: white;  /* Text color */
+    border-radius: 30px;  /* Rounded corners */
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #e5941d;  /* Darker shade when hovering */
+    transform: scale(1.05);  /* Slightly enlarge the button on hover */
+}
+
+.btn:active {
+    transform: scale(0.98);  /* Slightly shrink the button when clicked */
+}
+
+.btn-sm {
+    padding: 6px 12px;  /* Smaller padding for small buttons */
+    font-size: 0.9rem;  /* Smaller font size for small buttons */
+}
+
+/* Footer */
+.footer {
+    background-color: #0e2431;
+    color: #ffffff;
+    text-align: center;
+    font-weight: 600;
+    padding: 2.5rem 1rem;
+    font-family: Arial, sans-serif;
+}
+
+.footer__title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+}
+
+.footer__social {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.footer__icon {
+    font-size: 1.75rem;
+    color: #ffffff;
+    transition: color 0.3s ease, transform 0.3s ease;
+    text-decoration: none;
+}
+
+.footer__icon:hover {
+    color: #f5a623; /* Change color on hover */
+    transform: scale(1.2); /* Slight zoom effect */
+}
+
+/* E-commerce Section */
+.footer__ecommerce {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.footer__ecommerce a {
+    font-size: 1rem;
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer__ecommerce a:hover {
+    color: #f5a623; /* Hover color for e-commerce links */
+}
+
+/* Footer Text */
+.footer p {
+    font-size: 0.9rem;
+    color: #cccccc;
+    margin-top: 1.5rem;
+}
+
+/* Responsive Design */
+@media screen and (min-width: 768px) {
+    .footer {
+        padding: 3rem 0;
+    }
+
+    .footer__title {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .footer__icon {
+        font-size: 2rem;
+        margin: 0 1.5rem;
+    }
+
+    .footer__ecommerce a {
+        font-size: 1.1rem;
+    }
+
+    .section {
+        padding-top: 4rem;
+        padding-bottom: 3rem;
+    }
+
+    .section-title {
+        margin-bottom: 3.5rem;
+        line-height: 1.8;
+    }
+
+    .section-title::after {
+        width: 80px;
+        top: 3rem;
+    }
+}
+
+
+/* review */
+section {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: black;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .contact__input, .contact__button {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .contact__button {
+            background-color:#f5a623;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .contact__button:hover {
+            background-color:#d4880f;
+        }
+        .messages-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px #d4880f;
+        }
+        .message-card {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+        .message-card:last-child {
+            border-bottom: none;
+        }
+        .message-card h4 {
+            margin: 0;
+            font-size: 1.2em;
+            color:#d4880f;
+        }
+        .message-card p {
+            margin: 5px 0;
+            font-size: 1em;
+            color: #555;
+        }
+        .message-card small {
+            font-size: 0.9em;
+            color: #999;
+        }
+
+        /* تصميم عام لزر الحذف */
+.delete-button {
+    background-color: #ff4d4d; /* لون الخلفية الأحمر */
+    color: white; /* لون النص */
+    border: none; /* إزالة الحدود */
+    border-radius: 5px; /* زوايا مستديرة */
+    padding: 8px 12px; /* مسافة داخلية */
+    font-size: 14px; /* حجم النص */
+    cursor: pointer; /* مؤشر الفأرة عند المرور */
+    transition: background-color 0.3s ease; /* تأثير عند التغيير */
+}
+
+/* تأثير عند تمرير الفأرة على الزر */
+.delete-button:hover {
+    background-color: #e60000; /* لون أغمق عند التمرير */
+}
+
+/* تأثير عند الضغط على الزر */
+.delete-button:active {
+    background-color: #cc0000; /* لون أغمق عند الضغط */
+    transform: scale(0.95); /* تأثير ضغط الزر */
+}
+
+/* تنسيق الزر داخل الكارت */
+.message-card .delete-button {
+    margin-top: 10px; /* مسافة أعلى الزر */
+    display: inline-block; /* لجعل الزر يظهر بشكل صحيح */
+}
+
+</style>
+<body>
+    <nav class="navbar">
+
+        <div class="logo">
+            <img src="logo.png" alt="DigitalMart Logo">
+            <span>DigitalMart</span>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="Home.html">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#categories">Categories</a></li>
+            <li><a href="#Partners">Our Trusted Partners</a></li>
+            <li><a href="#Reviews">Reviews</a></li>
+            <li><a href="#Contact">Contact Us</a></li>
+        </ul>
+        <a href="login-sinup.html" class="login-btn">Login</a>
+    </nav>
+        <!-- END BREADCRUMB -->
+
+        <!--=============== DETAILS ===============-->
+        <section class="details section-lg">
+            <div class="details-container container grid">
+                <div class="details-group">
+                    <img src="p1.jpg" alt="" class="details-img main">
+
+                    <div class="details-small-images grid">
+                        <img src="p1.jpg" alt="" class="details-small-img sub">
+                        <img src="p1.jpg" alt="" class="details-small-img main">
+                        <img src="p1.jpg" alt="" class="details-small-img sub">
+                        <img src="p1.jpg" alt="" class="details-small-img sub">
+                    </div>
+                </div>
+
+                <div class="details-group">
+                    <h3 class="details-title">Al-Jamous</h3>
+                    <p class="details-brand">Brands: <span>DELL</span></p>
+                    <h1>Choose the website and price you prefer.</h1>
+                    <br></br>
+                    <div class="product-gallery">
+                     
+                    
+                        <!-- Product 1 -->
+                        <div class="product-item">
+                            <a href="https://www.amazon.com">
+                                <span class="product-price">$116</span>
+                                <img src="a1.jpg" alt="Product 1">
+                            </a>
+                        </div>
+                        
+                        <!-- Product 2 -->
+                        <div class="product-item">
+                            <a href="https://www.shein.com">
+                                <span class="product-price">$105</span>
+                                <img src="a2.jpg" alt="Product 2">
+                            </a>
+                        </div>
+                        
+                        <!-- Product 3 -->
+                        <div class="product-item">
+                            <a href="https://www.alibaba.com">
+                                <span class="product-price">$110</span>
+                                <img src="a3.jpg" alt="Product 3">
+                            </a>
+                        </div>
+                        
+                        <!-- Product 4 -->
+                        <div class="product-item">
+                            <a href="https://www.aliexpress.com">
+                                <span class="product-price">$90</span>
+                                <img src="a4.jpg" alt="Product 4">
+                            </a>
+                        </div>
+                        
+                        <!-- Product 5 -->
+                        <div class="product-item">
+                            <a href="https://www.noon.com">
+                                <span class="product-price">$99</span>
+                                <img src="a5.jpg" alt="Product 5">
+                            </a>
+                        </div>
+                    </div>
+
+                    <p class="short-description">
+                        Is it possible to find powerful air strikes in the modern era?
+                        With Samsung, you will discover a world of Japan:
+                        <p>
+                        ✅ Stunning Super AMOLED display for a love-adventure viewing experience.
+                        </p>
+                        <p>
+                        ✅ Up to 108MP camera resolution, featuring customization of unforgettable. 
+                    </p>
+                    <p>
+                        ✅ Ultra-fast performance with advanced gaming processors packed in..
+                    </p>
+                    <p>
+                        ✅ Long-lasting battery with fast charging and wireless charging .
+                    </p>
+                        ✅ Luxurious design to suit your distinctive personality.
+                        </p>
+                    </p>
+
+                    <ul class="product-list">
+
+                        <li class="list-item flex">
+                            <i class="fi-rs-crown"></i> 1 Year Al Jazeera Brand Warranty
+                        </li>
+
+                        <li class="list-item flex">
+                            <i class="fi-rs-refresh"></i> 30 Days Return Policy
+                        </li>
+
+                        <li class="list-item flex">
+                            <i class="fi-rs-credit-card"></i> Cash on Delivery available
+                        </li>
+                    </ul>
+
+                    <div class="details-color flex">
+                        <span class="details-color-title">Color</span>
+
+                        <ul class="color-list">
+
+                           
+
+                            <li>
+                                <a href="#" class="color-link" style="background-color: hsl(238, 100%, 50%);"></a>
+                            </li>
+                            <li>
+                                <a href="#" class="color-link" style="background-color: hsl(0, 14%, 83%);"></a>
+                            </li>
+                            <li>
+                                <a href="#" class="color-link" style="background-color: hsl(0, 0%, 0%);"></a>
+                            </li>
+
+                            <li>
+                                <a href="#" class="color-link" style="background-color: hsl(304, 100%, 78%);"></a>
+                            </li>
+
+                          
+                        </ul>
+                    </div>
+
+                    <div class="details-size flex">
+                        <span class="details-size-title">Ram</span>
+
+                        <ul class="size-list">
+
+                            <li>
+                                <a href="#" class="size-link size-active">8G</a>
+                            </li>
+
+                            <li>
+                                <a href="#" class="size-link">12G</a>
+                            </li>
+
+                            <li>
+                                <a href="#" class="size-link">16G</a>
+                            </li>
+
+                            <li>
+                                <a href="#" class="size-link">32G</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="details-action">
+                       
+
+                        <a href="view-products.html" class="btn btn-sm" onclick="changeCart(event)">Back</a>
+
+                        
+                    </div>
+
+                   
+                </div>
+            </div>
+        </section>
+
+        <section id="Contact">
+            <h2 class="section-title">Give your opinion about the product</h2>
+
+           
+            <form id="contactForm">
+                <input type="text" name="name" placeholder="Name" class="contact__input" required>
+                <input type="email" name="email" placeholder="Email " class="contact__input" required>
+                <textarea name="message" placeholder="your Message" rows="5" class="contact__input" required></textarea>
+                <input type="submit" value="Send" class="contact__button">
+            </form>
+            <div id="messagesContainer" class="messages-container">
+                <h3>Review</h3>
+                <!-- سيتم عرض المراجعات هنا -->
+            </div>
+
+        </section>
+            
+        <footer class="footer">
+            <p class="footer__title">DigitalMart</p>
+            <h3>Social Media Links</h3>
+            <br></br>
+            <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+            
+            <!-- Social Media Links -->
+            <div class="footer__social">
+                <a href="https://www.facebook.com/profile.php?id=100018349476436&mibextid=ZbWKwL" class="footer__icon"><i class='bx bxl-facebook'></i></a>
+                <a href="https://www.instagram.com/mohammad_alsharef1?igsh=MWQzdG41b2wzMjgx" class="footer__icon"><i class='bx bxl-instagram'></i></a>
+                <a href="https://www.linkedin.com/in/%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D9%84%D8%B4%D8%B1%D9%8A%D9%81-67091619b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="footer__icon"><i class='bx bxl-linkedin'></i></a>
+                <a href="https://github.com/yourusername" class="footer__icon"><i class='bx bxl-github'></i></a>
+            </div>
+            <br></br>
+            <!-- E-commerce Links -->
+            <h3>Popular E-commerce Sites</h3>
+            <div class="footer__ecommerce">
+                <a href="https://www.amazon.com" target="_blank" class="footer__icon">Amazon</a> |
+                <a href="https://www.ebay.com" target="_blank" class="footer__icon">eBay</a> |
+                <a href="https://www.aliexpress.com" target="_blank" class="footer__icon">AliExpress</a> |
+                <a href="https://www.walmart.com" target="_blank" class="footer__icon">Walmart</a> |
+                <a href="https://www.etsy.com" target="_blank" class="footer__icon">Etsy</a> |
+                <a href="https://www.target.com" target="_blank" class="footer__icon">Target</a> |
+                <a href="https://www.newegg.com" target="_blank" class="footer__icon">Newegg</a> |
+                <a href="https://www.shopify.com" target="_blank" class="footer__icon">Shopify</a> |
+                <a href="https://www.rakuten.com" target="_blank" class="footer__icon">Rakuten</a> |
+                <a href="https://www.bestbuy.com" target="_blank" class="footer__icon">Best Buy</a>
+            </div>
+        
+            <p>DigitalMart / All rights reserved 2024</p>
+        </footer>
+        
+
+       
+    </main>
+    
+  <!-- Include SweetAlert Library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.getElementById("contactForm").addEventListener("submit", function (e) {
+        e.preventDefault(); // Prevent page reload
+
+        // Retrieve form data
+        const name = e.target.name.value.trim();
+        const email = e.target.email.value.trim();
+        const message = e.target.message.value.trim();
+
+        // Validate that all fields are filled
+        if (!name || !email || !message) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Please fill in all fields.',
+                background: '#f5f5f5', // لون الخلفية الجديد
+                color: '#333', // لون النص داخل التنبيه
+                confirmButtonColor: '#3085d6', // لون زر التأكيد
+            });
+            return;
+        }
+
+        // Prepare the message object
+        const newMessage = {
+            id: Date.now(), // Unique identifier for each message
+            name,
+            email,
+            message,
+            date: new Date().toLocaleString(),
+        };
+
+        // Retrieve previously stored messages
+        const messages = JSON.parse(localStorage.getItem("messages")) || [];
+        messages.push(newMessage);
+
+        // Store the updated messages
+        localStorage.setItem("messages", JSON.stringify(messages));
+
+        // Reset the form
+        e.target.reset();
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Message Sent!',
+            text: 'Your message has been sent successfully.',
+            background: '#f5f5f5', // لون الخلفية الجديد
+           color: '#4EA27A', // لون النص داخل التنبيه
+           confirmButtonColor: '#4EA27A', // لون زر التأكيد
+        }).then(() => {
+            loadMessages(); // Refresh the display after SweetAlert closes
+        });
+    });
+
+    // Function to display messages
+    function loadMessages() {
+        const messages = JSON.parse(localStorage.getItem("messages")) || [];
+        const container = document.getElementById("messagesContainer");
+
+        if (messages.length === 0) {
+            container.innerHTML = "<p>No messages found.</p>";
+            return;
+        }
+
+        container.innerHTML = messages
+            .map(
+                (msg) => `
+            <div class="message-card" id="message-${msg.id}">
+                <h4>${msg.name} (${msg.email})</h4>
+                <p>${msg.message}</p>
+                <small>Sent on: ${msg.date}</small>
+                <button class="delete-button" onclick="deleteMessage(${msg.id})">Delete</button>
+            </div>
+        `
+            )
+            .join("");
+    }
+
+    // Function to delete a message
+    function deleteMessage(id) {
+        const messages = JSON.parse(localStorage.getItem("messages")) || [];
+        const updatedMessages = messages.filter((msg) => msg.id !== id);
+
+        // Update local storage
+        localStorage.setItem("messages", JSON.stringify(updatedMessages));
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Message Deleted!',
+            text: 'The message has been deleted successfully.',
+            background: '#f5f5f5', // لون الخلفية الجديد
+           color: '#cc0000', // لون النص داخل التنبيه
+           confirmButtonColor: '#cc0000', // لون زر التأكيد
+        }).then(() => {
+            loadMessages(); // Refresh the display after SweetAlert closes
+        });
+    }
+
+    // Load messages on page load
+    window.addEventListener("DOMContentLoaded", loadMessages);
+</script>
+
+</body>
+
+</html>

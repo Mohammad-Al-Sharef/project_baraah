@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In & Sign Up</title>
+    <link href="https://cdn.jsdelivr.net/gh/boxicons/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #f5a623;
+            --secondary-color: #f5a623;
+            --black: #000000;
+            --white: #ffffff;
+            --gray: #efefef;
+            --gray-2: #757575;
+        }
+
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--white);
+        }
+
+        .container {
+            display: flex;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .form-section, .info-section {
+            width: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .form-section {
+            background-color: var(--white);
+        }
+
+        .info-section {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .info-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-section p {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .form-wrapper {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .input-group {
+            position: relative;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .input-group i {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: var(--gray-2);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.8rem 1.5rem 0.8rem 3rem;
+            font-size: 1rem;
+            background-color: var(--gray);
+            border-radius: .5rem;
+            border: none;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border: 0.125rem solid var(--primary-color);
+        }
+
+        button {
+            width: 100%;
+            padding: 0.8rem 0;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: .5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .form p {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--gray-2);
+        }
+
+        .form p b {
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- FORM SECTION -->
+        <div class="form-section">
+            <div class="form-wrapper">
+                <!-- SIGN UP FORM -->
+                <div id="signUpForm" class="form">
+                    <div class="input-group">
+                        <i class='bx bxs-user'></i>
+                        <input type="text" id="signup-username" placeholder="Username">
+                    </div>
+                    <div class="input-group">
+                        <i class='bx bx-mail-send'></i>
+                        <input type="email" id="signup-email" placeholder="Email">
+                    </div>
+                    <div class="input-group">
+                        <i class='bx bxs-lock-alt'></i>
+                        <input type="password" id="signup-password" placeholder="Password">
+                    </div>
+                    <div class="input-group">
+                        <i class='bx bxs-lock-alt'></i>
+                        <input type="password" id="signup-confirm-password" placeholder="Confirm password">
+                    </div>
+                    <button onclick="signUp()">Sign up</button>
+                    <p>Already have an account? <b onclick="toggleForm()">Sign in here</b></p>
+                </div>
+
+                <!-- SIGN IN FORM -->
+                <div id="signInForm" class="form" style="display: none;">
+                    <div class="input-group">
+                        <i class='bx bxs-user'></i>
+                        <input type="text" id="signin-username" placeholder="Username">
+                    </div>
+                    <div class="input-group">
+                        <i class='bx bxs-lock-alt'></i>
+                        <input type="password" id="signin-password" placeholder="Password">
+                    </div>
+                    <button onclick="signIn()">Sign in</button>
+                    <p>Don't have an account? <b onclick="toggleForm()">Sign up here</b></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- INFO SECTION -->
+        <div class="info-section">
+            <h2 id="infoTitle">Join Us</h2>
+            <p id="infoText">"Welcome to our family! 🌟 The alternative in the world of affiliate marketing has now joined us. All you have to do is fill out the information below to start your journey to success with us."</p>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function toggleForm() {
+    const signUpForm = document.getElementById('signUpForm');
+    const signInForm = document.getElementById('signInForm');
+    const infoTitle = document.getElementById('infoTitle');
+    const infoText = document.getElementById('infoText');
+
+    if (signUpForm.style.display === 'none') {
+        signUpForm.style.display = 'block';
+        signInForm.style.display = 'none';
+        infoTitle.textContent = 'Join Us';
+        infoText.textContent = '"Welcome to our family! 🌟 The alternative in the world of affiliate marketing has now joined us. All you have to do is fill out the information below to start your journey to success with us."';
+    } else {
+        signUpForm.style.display = 'none';
+        signInForm.style.display = 'block';
+        infoTitle.textContent = 'Welcome Back!';
+        infoText.textContent = 'Welcome back to our site! We are glad you are back with us. Enjoy browsing the latest offers.';
+    }
+}
+
+function signUp() {
+    const username = document.getElementById('signup-username').value;
+    const email = document.getElementById('signup-email').value;
+    const password = document.getElementById('signup-password').value;
+    const confirmPassword = document.getElementById('signup-confirm-password').value;
+
+    if (password !== confirmPassword) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Passwords do not match!',
+            text: 'Please make sure both passwords are the same.',
+        });
+        return;
+    }
+
+    // Store the user's data in localStorage (simulating account creation)
+    localStorage.setItem('username', username);
+    localStorage.setItem('email', email);
+    localStorage.setItem('password', password);
+
+    Swal.fire({
+        icon: 'success',
+        title: 'Account created successfully!',
+        text: 'Your account has been created. You can now sign in.',
+    }).then(() => {
+        toggleForm(); // Switch to the sign-in form after the success message
+    });
+}
+
+function signIn() {
+    const username = document.getElementById('signin-username').value;
+    const password = document.getElementById('signin-password').value;
+
+    // Define the admin username and password for control panel access
+    const adminUsername = "admin";
+    const adminPassword = "admin123";
+
+    // Retrieve user data from localStorage (simulating login)
+    const storedUsername = localStorage.getItem('username');
+    const storedPassword = localStorage.getItem('password');
+
+    // Check if the user is an admin
+    if (username === adminUsername && password === adminPassword) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Welcome to the control panel!',
+            text: 'You are now logged in as an admin.',
+        }).then(() => {
+            window.location.href = "dashbord.html"; // Replace with the control panel page URL
+        });
+    } 
+    // Check if the user is a regular user
+    else if (username === storedUsername && password === storedPassword) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Welcome back, ' + username + '!',
+            text: 'You are successfully logged in.',
+        }).then(() => {
+            window.location.href = "Profile.html"; // Replace with the profile page URL
+        });
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid username or password!',
+            text: 'Please check your credentials and try again.',
+        });
+    }
+}
+
+    </script>
+</body>
+</html>

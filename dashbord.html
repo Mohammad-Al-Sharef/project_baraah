@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Admin Dashboard</title>
+    <style>
+/* Reset styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #f5a623; /* Admin Dashboard */
+}
+
+.sidebar a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    margin: 10px 0;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar a:hover {
+    background-color: #34495e;
+    color: #f5a623; /* تغيير اللون عند التمرير */
+}
+
+/* Main Content Styles */
+.main-content {
+  margin-left: 270px;
+  padding: 20px;
+  width: calc(100% - 270px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #f5f5f5;
+  box-sizing: border-box;
+}
+
+/* Stats Section */
+.stats {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.stat-card, .stat-item {
+  flex: 1;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card h3, .stat-item h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #333;
+}
+
+.stat-card p, .stat-item p {
+  margin: 10px 0 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #f5a623;
+}
+
+/* Product List Section */
+#product-list {
+  margin: 0;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#product-list h2 {
+  margin-bottom: 15px;
+  color: #333333;
+  font-size: 1.8rem;
+}
+
+#product-list button {
+  padding: 10px 20px;
+  background-color: #f5a623;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 15px;
+}
+
+#product-list button:hover {
+  background-color: #ab741b;
+}
+
+/* Product Grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Product Card */
+.product-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  padding: 15px;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.product-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-bottom: 1px solid #ddd;
+}
+
+.product-card .product-title {
+  font-size: 1.2rem;
+  margin: 10px 0;
+  color: #333333;
+  font-weight: bold;
+}
+
+.product-card .product-price {
+  font-size: 1.1rem;
+  margin: 5px 0;
+  color: #f5a623;
+  font-weight: bold;
+}
+
+.product-card .product-description {
+  font-size: 0.9rem;
+  margin: 10px 0;
+  color: #666666;
+}
+
+/* Buttons inside Product Card */
+.product-card button {
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background-color 0.3s ease;
+}
+
+
+
+
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 400px;
+    position: relative;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content button.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.modal-content h3 {
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-content form input,
+.modal-content form textarea,
+.modal-content form button {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.modal-content form button {
+    background-color: #f5a623;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modal-content form button:hover {
+    background-color: #f5a623;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h2>Admin Dashboard</h2>
+        <nav>
+            <ul>
+                <li><a href="#add-product">Add Product</a></li>
+                <li><a href="#product-list">Manage Products</a></li>
+                <li><a href="Home.html">Home Page</a></li>
+                <li><a href="view-products.html">view products</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Stats Section -->
+        <section class="stats">
+            <div class="stat-card">
+                <h3>Total Products</h3>
+                <p id="total-products">0</p>
+            </div>
+            <div class="product-review-stats">
+                <div class="stat-item">
+                    <h3>Total Products Reviewed</h3>
+                    <p id="totalReviewed">150</p>
+                </div>
+                <div class="stat-item">
+                    <h3>Since Last Update</h3>
+                    <p id="sinceLastUpdate">20</p>
+                </div>
+            </div>
+        </section>
+        
+
+        <!-- Product List Section -->
+        <section id="product-list">
+            <h2>Manage Products</h2>
+            <button onclick="openModal()">Add Product</button>
+            <div id="product-grid" class="product-grid">
+                <!-- Products will be loaded dynamically here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal()">Close</button>
+            <h2>Add New Product</h2>
+            <form id="add-product-form">
+                <label for="product-name">Product Name:</label>
+                <input type="text" id="product-name" required>
+
+                <label for="product-price">Price:</label>
+                <input type="number" id="product-price" required>
+
+                <label for="product-description">Description:</label>
+                <textarea id="product-description" required></textarea>
+
+                <label for="product-image">Add Image:</label>
+                <input type="file" id="product-image" />
+
+                <button type="submit">Add Product</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+// API URL
+const apiUrl = "https://fakestoreapi.com/products";
+
+// Fetch and display products
+async function fetchProducts() {
+    try {
+        const response = await fetch(apiUrl);
+        const products = await response.json();
+        renderProducts(products);
+        updateTotalProducts(products.length);
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load products.',
+            background: '#f8d7da', // Optional: Customize background color
+            confirmButtonColor: '#dc3545' // Optional: Customize button color
+        });
+    }
+}
+
+// Render products in the grid
+function renderProducts(products) {
+    const gridContainer = document.getElementById("product-grid");
+    gridContainer.innerHTML = products
+        .map((product) => createProductHTML(product))
+        .join("");
+}
+
+// Create product HTML
+function createProductHTML(product) {
+    return `
+        <div class="product-card" id="product-${product.id}">
+            <img src="${product.image}" alt="${product.title}" class="product-image">
+            <div class="product-details">
+                <h3 class="product-title">${product.title}</h3>
+                <p class="product-price">$${product.price}</p>
+                <p class="product-description">${product.description.slice(0, 100)}...</p>
+                <button onclick="editProduct(${product.id})">Edit</button>
+                <button onclick="deleteProduct(${product.id})">Delete</button>
+            </div>
+        </div>
+    `;
+}
+
+// Modal handlers
+function openModal() {
+    document.getElementById("product-modal").classList.add("active");
+}
+
+function closeModal() {
+    document.getElementById("product-modal").classList.remove("active");
+}
+
+// Handle Add Product form submission
+document.getElementById("add-product-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const productData = {
+        title: document.getElementById("product-name").value,
+        price: document.getElementById("product-price").value,
+        description: document.getElementById("product-description").value,
+        image: document.getElementById("product-image").files[0] ? URL.createObjectURL(document.getElementById("product-image").files[0]) : "", // Handle image upload
+    };
+
+    addProduct(productData);
+});
+
+// Add new product
+async function addProduct(productData) {
+    try {
+        const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(productData),
+        });
+
+        if (response.ok) {
+            const newProduct = await response.json();
+            renderNewProduct(newProduct);
+            incrementTotalProducts();
+            Swal.fire({
+                icon: 'success',
+                title: 'Product Added!',
+                text: 'Your product has been added successfully.',
+                background: '#d4edda',
+                confirmButtonColor: '#28a745'
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed to Add Product',
+                text: 'Something went wrong. Please try again.',
+                background: '#f8d7da',
+                confirmButtonColor: '#dc3545'
+            });
+        }
+    } catch (error) {
+        console.error("Error adding product:", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred. Please try again.',
+            background: '#f8d7da',
+            confirmButtonColor: '#dc3545'
+        });
+    }
+}
+
+// Render new product in the grid
+function renderNewProduct(product) {
+    const gridContainer = document.getElementById("product-grid");
+    gridContainer.innerHTML += createProductHTML(product);
+}
+
+// Update total products count
+function updateTotalProducts(count) {
+    document.getElementById("total-products").textContent = count;
+}
+
+// Increment total products count
+function incrementTotalProducts() {
+    const totalProductsElement = document.getElementById("total-products");
+    const currentCount = parseInt(totalProductsElement.textContent, 10);
+    totalProductsElement.textContent = currentCount + 1;
+}
+
+// Delete product
+function deleteProduct(productId) {
+    const productCard = document.getElementById(`product-${productId}`);
+    if (productCard) {
+        productCard.remove();
+        decrementTotalProducts();
+        Swal.fire({
+            icon: 'success',
+            title: 'Product Deleted',
+            text: `Product with ID ${productId} has been deleted.`,
+            background: '#d4edda',
+            confirmButtonColor: '#28a745'
+        });
+    }
+}
+
+// Decrement total products count
+function decrementTotalProducts() {
+    const totalProductsElement = document.getElementById("total-products");
+    const currentCount = parseInt(totalProductsElement.textContent, 10);
+    totalProductsElement.textContent = currentCount - 1;
+}
+
+// Edit product
+function editProduct(productId) {
+    const productCard = document.getElementById(`product-${productId}`);
+    if (!productCard) return;
+
+    // Fetch current data
+    const title = productCard.querySelector(".product-title").textContent;
+    const price = productCard.querySelector(".product-price").textContent.slice(1);
+    const description = productCard.querySelector(".product-description").textContent;
+
+    // Pre-fill modal
+    document.getElementById("product-name").value = title;
+    document.getElementById("product-price").value = price;
+    document.getElementById("product-description").value = description;
+    openModal();
+
+    // Update product on save
+    document.getElementById("add-product-form").onsubmit = (event) => {
+        event.preventDefault();
+
+        const updatedData = {
+            title: document.getElementById("product-name").value,
+            price: document.getElementById("product-price").value,
+            description: document.getElementById("product-description").value,
+            image: productCard.querySelector(".product-image").src, // Retaining current image
+        };
+
+        productCard.outerHTML = createProductHTML({
+            id: productId,
+            ...updatedData,
+        });
+
+        closeModal();
+        Swal.fire({
+            icon: 'success',
+            title: 'Product Updated',
+            text: 'Your product has been updated successfully.',
+            background: '#d4edda',
+            confirmButtonColor: '#28a745'
+        });
+    };
+}
+
+// Fetch products on page load
+window.addEventListener("DOMContentLoaded", fetchProducts);
+
+</script>
+
+    
+</body>
+</html>
