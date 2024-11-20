@@ -278,6 +278,7 @@ body {
                 <li><a href="#product-list">Manage Products</a></li>
                 <li><a href="Home.html">Home Page</a></li>
                 <li><a href="view-products.html">view products</a></li>
+                <li><a href="Reviews.html">Reviews</a></li>
             </ul>
         </nav>
     </aside>
@@ -521,7 +522,7 @@ function editProduct(productId) {
         productCard.outerHTML = createProductHTML({
             id: productId,
             ...updatedData,
-        });
+        }); 
 
         closeModal();
         Swal.fire({
