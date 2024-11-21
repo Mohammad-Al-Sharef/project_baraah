@@ -342,95 +342,101 @@ body {
 // API URL
 const apiUrl = "https://fakestoreapi.com/products";
 
-// Fetch and display products
+// دالة لجلب وعرض المنتجات
 async function fetchProducts() {
     try {
+        // إرسال طلب لجلب المنتجات من API
         const response = await fetch(apiUrl);
-        const products = await response.json();
-        renderProducts(products);
-        updateTotalProducts(products.length);
+        const products = await response.json(); // تحويل الاستجابة إلى JSON
+        renderProducts(products); // عرض المنتجات في الصفحة
+        updateTotalProducts(products.length); // تحديث العدد الإجمالي للمنتجات
     } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Error fetching products:", error); // تسجيل الخطأ في وحدة التحكم
+        // عرض رسالة خطأ باستخدام SweetAlert
         Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to load products.',
-            background: '#f8d7da', // Optional: Customize background color
-            confirmButtonColor: '#dc3545' // Optional: Customize button color
+            icon: 'error', // أيقونة الخطأ
+            title: 'Error', // عنوان الرسالة
+            text: 'Failed to load products.', // نص الرسالة
+            background: '#f8d7da', // لون الخلفية (اختياري)
+            confirmButtonColor: '#dc3545' // لون زر التأكيد (اختياري)
         });
     }
 }
 
-// Render products in the grid
+// دالة لعرض المنتجات داخل الشبكة
 function renderProducts(products) {
-    const gridContainer = document.getElementById("product-grid");
+    const gridContainer = document.getElementById("product-grid"); // تحديد عنصر الشبكة
     gridContainer.innerHTML = products
-        .map((product) => createProductHTML(product))
-        .join("");
+        .map((product) => createProductHTML(product)) // إنشاء HTML لكل منتج
+        .join(""); // دمج جميع المنتجات في نص واحد
 }
 
-// Create product HTML
+// دالة لإنشاء HTML الخاص بكل منتج
 function createProductHTML(product) {
     return `
         <div class="product-card" id="product-${product.id}">
-            <img src="${product.image}" alt="${product.title}" class="product-image">
+            <img src="${product.image}" alt="${product.title}" class="product-image"> <!-- صورة المنتج -->
             <div class="product-details">
-                <h3 class="product-title">${product.title}</h3>
-                <p class="product-price">$${product.price}</p>
-                <p class="product-description">${product.description.slice(0, 100)}...</p>
-                <button onclick="editProduct(${product.id})">Edit</button>
-                <button onclick="deleteProduct(${product.id})">Delete</button>
+                <h3 class="product-title">${product.title}</h3> <!-- عنوان المنتج -->
+                <p class="product-price">$${product.price}</p> <!-- سعر المنتج -->
+                <p class="product-description">${product.description.slice(0, 100)}...</p> <!-- وصف المنتج (مقتطع) -->
+                <button onclick="editProduct(${product.id})">Edit</button> <!-- زر التعديل -->
+                <button onclick="deleteProduct(${product.id})">Delete</button> <!-- زر الحذف -->
             </div>
         </div>
     `;
 }
 
-// Modal handlers
+// معالجات النوافذ المنبثقة
 function openModal() {
-    document.getElementById("product-modal").classList.add("active");
+    document.getElementById("product-modal").classList.add("active"); // فتح النافذة
 }
 
 function closeModal() {
-    document.getElementById("product-modal").classList.remove("active");
+    document.getElementById("product-modal").classList.remove("active"); // إغلاق النافذة
 }
 
-// Handle Add Product form submission
+// معالجة إرسال الفورم الخاص بإضافة منتج جديد
 document.getElementById("add-product-form").addEventListener("submit", (event) => {
-    event.preventDefault();
+    event.preventDefault(); // منع إعادة تحميل الصفحة
 
+    // إنشاء كائن يحتوي على بيانات المنتج الجديد
     const productData = {
-        title: document.getElementById("product-name").value,
-        price: document.getElementById("product-price").value,
-        description: document.getElementById("product-description").value,
-        image: document.getElementById("product-image").files[0] ? URL.createObjectURL(document.getElementById("product-image").files[0]) : "", // Handle image upload
+        title: document.getElementById("product-name").value, // اسم المنتج
+        price: document.getElementById("product-price").value, // سعر المنتج
+        description: document.getElementById("product-description").value, // وصف المنتج
+        image: document.getElementById("product-image").files[0] ? URL.createObjectURL(document.getElementById("product-image").files[0]) : "", // صورة المنتج
     };
 
-    addProduct(productData);
+    addProduct(productData); // استدعاء الدالة لإضافة المنتج
 });
 
-// Add new product
+// دالة لإضافة منتج جديد
 async function addProduct(productData) {
     try {
+        // إرسال طلب لإضافة المنتج إلى API
         const response = await fetch(apiUrl, {
-            method: "POST",
+            method: "POST", // طريقة الطلب (إضافة)
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json", // نوع البيانات
             },
-            body: JSON.stringify(productData),
+            body: JSON.stringify(productData), // تحويل بيانات المنتج إلى JSON
         });
 
         if (response.ok) {
-            const newProduct = await response.json();
-            renderNewProduct(newProduct);
-            incrementTotalProducts();
+            const newProduct = await response.json(); // الحصول على المنتج الجديد من الاستجابة
+            renderNewProduct(newProduct); // عرض المنتج الجديد في الشبكة
+            incrementTotalProducts(); // تحديث العدد الإجمالي
+            // عرض رسالة نجاح باستخدام SweetAlert
             Swal.fire({
-                icon: 'success',
-                title: 'Product Added!',
-                text: 'Your product has been added successfully.',
-                background: '#d4edda',
-                confirmButtonColor: '#28a745'
+                icon: 'success', // أيقونة النجاح
+                title: 'Product Added!', // عنوان الرسالة
+                text: 'Your product has been added successfully.', // نص الرسالة
+                background: '#d4edda', // لون الخلفية
+                confirmButtonColor: '#28a745' // لون زر التأكيد
             });
         } else {
+            // عرض رسالة خطأ في حال فشل الإضافة
             Swal.fire({
                 icon: 'error',
                 title: 'Failed to Add Product',
@@ -440,7 +446,8 @@ async function addProduct(productData) {
             });
         }
     } catch (error) {
-        console.error("Error adding product:", error);
+        console.error("Error adding product:", error); // تسجيل الخطأ في وحدة التحكم
+        // عرض رسالة خطأ باستخدام SweetAlert
         Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -451,30 +458,31 @@ async function addProduct(productData) {
     }
 }
 
-// Render new product in the grid
+// دالة لعرض المنتج الجديد داخل الشبكة
 function renderNewProduct(product) {
-    const gridContainer = document.getElementById("product-grid");
-    gridContainer.innerHTML += createProductHTML(product);
+    const gridContainer = document.getElementById("product-grid"); // تحديد عنصر الشبكة
+    gridContainer.innerHTML += createProductHTML(product); // إضافة المنتج الجديد إلى الشبكة
 }
 
-// Update total products count
+// تحديث العدد الإجمالي للمنتجات
 function updateTotalProducts(count) {
-    document.getElementById("total-products").textContent = count;
+    document.getElementById("total-products").textContent = count; // تحديث النص
 }
 
-// Increment total products count
+// زيادة العدد الإجمالي للمنتجات
 function incrementTotalProducts() {
-    const totalProductsElement = document.getElementById("total-products");
-    const currentCount = parseInt(totalProductsElement.textContent, 10);
-    totalProductsElement.textContent = currentCount + 1;
+    const totalProductsElement = document.getElementById("total-products"); // تحديد العنصر
+    const currentCount = parseInt(totalProductsElement.textContent, 10); // الحصول على العدد الحالي
+    totalProductsElement.textContent = currentCount + 1; // زيادة العدد
 }
 
-// Delete product
+// حذف المنتج
 function deleteProduct(productId) {
-    const productCard = document.getElementById(`product-${productId}`);
+    const productCard = document.getElementById(`product-${productId}`); // تحديد بطاقة المنتج
     if (productCard) {
-        productCard.remove();
-        decrementTotalProducts();
+        productCard.remove(); // إزالة بطاقة المنتج من الصفحة
+        decrementTotalProducts(); // تقليل العدد الإجمالي
+        // عرض رسالة نجاح باستخدام SweetAlert
         Swal.fire({
             icon: 'success',
             title: 'Product Deleted',
@@ -485,46 +493,49 @@ function deleteProduct(productId) {
     }
 }
 
-// Decrement total products count
+// تقليل العدد الإجمالي للمنتجات
 function decrementTotalProducts() {
-    const totalProductsElement = document.getElementById("total-products");
-    const currentCount = parseInt(totalProductsElement.textContent, 10);
-    totalProductsElement.textContent = currentCount - 1;
+    const totalProductsElement = document.getElementById("total-products"); // تحديد العنصر
+    const currentCount = parseInt(totalProductsElement.textContent, 10); // الحصول على العدد الحالي
+    totalProductsElement.textContent = currentCount - 1; // تقليل العدد
 }
 
-// Edit product
+// تعديل المنتج
 function editProduct(productId) {
-    const productCard = document.getElementById(`product-${productId}`);
-    if (!productCard) return;
+    const productCard = document.getElementById(`product-${productId}`); // تحديد بطاقة المنتج
+    if (!productCard) return; // إذا لم يتم العثور على المنتج، إنهاء الوظيفة
 
-    // Fetch current data
+    // استرجاع البيانات الحالية من البطاقة
     const title = productCard.querySelector(".product-title").textContent;
-    const price = productCard.querySelector(".product-price").textContent.slice(1);
+    const price = productCard.querySelector(".product-price").textContent.slice(1); 
     const description = productCard.querySelector(".product-description").textContent;
 
-    // Pre-fill modal
+    // تعبئة البيانات في النموذج
     document.getElementById("product-name").value = title;
     document.getElementById("product-price").value = price;
     document.getElementById("product-description").value = description;
-    openModal();
+    openModal(); // فتح النافذة
 
-    // Update product on save
+    // تحديث المنتج عند الحفظ
     document.getElementById("add-product-form").onsubmit = (event) => {
-        event.preventDefault();
+        event.preventDefault(); // منع إعادة التحميل
 
+        // إنشاء البيانات المحدثة
         const updatedData = {
             title: document.getElementById("product-name").value,
             price: document.getElementById("product-price").value,
             description: document.getElementById("product-description").value,
-            image: productCard.querySelector(".product-image").src, // Retaining current image
+            image: productCard.querySelector(".product-image").src, // الاحتفاظ بالصورة الحالية
         };
 
+        // تحديث البطاقة في الصفحة
         productCard.outerHTML = createProductHTML({
             id: productId,
             ...updatedData,
         }); 
 
-        closeModal();
+        closeModal(); // إغلاق النافذة
+        // عرض رسالة نجاح باستخدام SweetAlert
         Swal.fire({
             icon: 'success',
             title: 'Product Updated',
@@ -535,10 +546,11 @@ function editProduct(productId) {
     };
 }
 
-// Fetch products on page load
+// استدعاء دالة جلب المنتجات عند تحميل الصفحة
 window.addEventListener("DOMContentLoaded", fetchProducts);
 
 </script>
+
 
     
 </body>

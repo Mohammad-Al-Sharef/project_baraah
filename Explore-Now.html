@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Hub</title>
+    <style>
+        /* تصميم الصفحة */
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.line-separator {
+    width: 80%;
+    height: 2px;
+    background-color: #f5a623; /* Match your website theme */
+    margin: 40px auto; /* Adjusts space and centers the line */
+}
+        body {
+    background-color: #fff;
+    color: #fff; /* Default text color for readability */
+    scroll-behavior: smooth;
+}
+       /* التصميم الأساسي */
+       .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: white;
+    color: #f5a623;
+    font-weight: bold;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 4px 8px #f5a623;
+    scroll-behavior: smooth;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.nav-links li {
+    margin: 0 15px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #f5a623;
+    font-weight: bold;
+    padding: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-links a:hover {
+    background-color: #f5a623;
+    color: white;
+    border-radius: 5px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    width: 70px;
+    margin-right: 30px;
+}
+
+.login-btn {
+    background-color: #f5a623;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+}
+.login-btn:hover {
+    background-color:#d4880f;
+}
+
+/* الأقسام */
+section {
+    padding: 60px 20px;
+    margin: 50px 20px; /* التباعد الخارجي */
+}
+
+.about {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto; 
+    padding: 20px; 
+    border: 1px solid #ff9800; 
+    border-radius: 10px;
+    background-color: #fff7e6;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.about h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color:#ff9800;
+}
+
+.about p {
+    font-size: 1.2em;
+    line-height: 1.8;
+    color: #555;
+}
+
+/* قسم المميزات */
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.feature-card {
+    background-color: #f5f5f5;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 8px 20px #f5a623;
+}
+
+/* تحسين الصور */
+.feature-card img {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 15px;
+    border-radius: 50%; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover img {
+    transform: scale(1.1); /* تكبير الصورة عند التمرير */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* ظل أكبر */
+}
+
+.feature-card h3 {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+    color: #333;
+}
+
+.feature-card p {
+    color: #666;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+/* تصميم التذييل */
+.footer {
+    background-color: #0e2431;
+    color: #ffffff;
+    text-align: center;
+    font-weight: 600;
+    padding: 2.5rem 1rem;
+    font-family: Arial, sans-serif;
+}
+
+.footer__title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+}
+
+.footer__social {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.footer__icon {
+    font-size: 1.75rem;
+    color: #ffffff;
+    transition: color 0.3s ease, transform 0.3s ease;
+    text-decoration: none;
+}
+
+.footer__icon:hover {
+    color: #f5a623; /* Change color on hover */
+    transform: scale(1.2); /* Slight zoom effect */
+}
+
+/* E-commerce Section */
+.footer__ecommerce {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.footer__ecommerce a {
+    font-size: 1rem;
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer__ecommerce a:hover {
+    color: #f5a623; /* Hover color for e-commerce links */
+}
+
+/* Footer Text */
+.footer p {
+    font-size: 0.9rem;
+    color: #cccccc;
+    margin-top: 1.5rem;
+}
+
+/* Responsive Design */
+@media screen and (min-width: 768px) {
+    .footer {
+        padding: 3rem 0;
+    }
+
+    .footer__title {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .footer__icon {
+        font-size: 2rem;
+        margin: 0 1.5rem;
+    }
+
+    .footer__ecommerce a {
+        font-size: 1.1rem;
+    }
+
+    .section {
+        padding-top: 4rem;
+        padding-bottom: 3rem;
+    }
+
+    .section-title {
+        margin-bottom: 3.5rem;
+        line-height: 1.8;
+    }
+
+    .section-title::after {
+        width: 80px;
+        top: 3rem;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+
+        <div class="logo">
+            <img src="logo.png" alt="DigitalMart Logo">
+            <span>DigitalMart</span>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="Home.html">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#categories">Categories</a></li>
+            <li><a href="#Partners">Our Trusted Partners</a></li>
+            <li><a href="view-products.html">view product</a></li>
+            <li><a href="#Contact">Contact Us</a></li>
+        </ul>
+        <a href="login-sinup.html" class="login-btn">Login</a>
+    </nav>
+
+    <!-- قسم التعريف بالموقع -->
+    <section id="about">
+        <div class="about">
+            <h2>About Our Platform</h2>
+            <p>DigitalMart is your go-to platform for finding the best deals, marketing top-notch products, and earning high commissions. Whether you're a marketer or a shopper, our platform connects you to global brands and trusted sellers.</p>
+        </div>
+    </section>
+
+    <!-- قسم المميزات -->
+    <section id="features">
+        <div class="features">
+            <div class="feature-card">
+                <img src="m1.jpg" alt="Global Brands">
+                <h3>Global Brands</h3>
+                <p>Work with the top global brands and expand your reach across the world.</p>
+            </div>
+            <div class="feature-card">
+                <img src="m2.jpg" alt="High Commissions">
+                <h3>High Commissions</h3>
+                <p>Enjoy competitive commission rates that maximize your earnings.</p>
+            </div>
+            <div class="feature-card">
+                <img src="m3.jpg" alt="Real-time Analytics">
+                <h3>Real-time Analytics</h3>
+                <p>Track your performance with real-time analytics and reports.</p>
+            </div>
+            <div class="feature-card">
+                <img src="m4.jpg" alt="Trusted Payments">
+                <h3>Trusted Payments</h3>
+                <p>Receive payments securely and on time with our trusted system.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- تذييل الصفحة -->
+    <footer class="footer">
+        <p class="footer__title">DigitalMart</p>
+        <h3>Social Media Links</h3>
+        <br></br>
+        <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+        
+        <!-- Social Media Links -->
+        <div class="footer__social">
+            <a href="https://www.facebook.com/profile.php?id=100018349476436&mibextid=ZbWKwL" class="footer__icon"><i class='bx bxl-facebook'></i></a>
+            <a href="https://www.instagram.com/mohammad_alsharef1?igsh=MWQzdG41b2wzMjgx" class="footer__icon"><i class='bx bxl-instagram'></i></a>
+            <a href="https://www.linkedin.com/in/%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D9%84%D8%B4%D8%B1%D9%8A%D9%81-67091619b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="footer__icon"><i class='bx bxl-linkedin'></i></a>
+            <a href="https://github.com/yourusername" class="footer__icon"><i class='bx bxl-github'></i></a>
+        </div>
+        <br></br>
+        <!-- E-commerce Links -->
+        <h3>Popular E-commerce Sites</h3>
+        <div class="footer__ecommerce">
+            <a href="https://www.amazon.com" target="_blank" class="footer__icon">Amazon</a> |
+            <a href="https://www.ebay.com" target="_blank" class="footer__icon">eBay</a> |
+            <a href="https://www.aliexpress.com" target="_blank" class="footer__icon">AliExpress</a> |
+            <a href="https://www.walmart.com" target="_blank" class="footer__icon">Walmart</a> |
+            <a href="https://www.etsy.com" target="_blank" class="footer__icon">Etsy</a> |
+            <a href="https://www.target.com" target="_blank" class="footer__icon">Target</a> |
+            <a href="https://www.newegg.com" target="_blank" class="footer__icon">Newegg</a> |
+            <a href="https://www.shopify.com" target="_blank" class="footer__icon">Shopify</a> |
+            <a href="https://www.rakuten.com" target="_blank" class="footer__icon">Rakuten</a> |
+            <a href="https://www.bestbuy.com" target="_blank" class="footer__icon">Best Buy</a>
+        </div>
+    
+        <p>DigitalMart / All rights reserved 2024</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // التمرير إلى قسم "About"
+        function scrollToAbout() {
+            document.querySelector('#about').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>

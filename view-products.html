@@ -294,7 +294,7 @@ body {
             <li><a href="#about">About Us</a></li>
             <li><a href="#categories">Categories</a></li>
             <li><a href="#Partners">Our Trusted Partners</a></li>
-            <li><a href="#Reviews">Reviews</a></li>
+            <li><a href="view-products.html">view product</a></li>
             <li><a href="#Contact">Contact Us</a></li>
         </ul>
         <a href="login-sinup.html" class="login-btn">Login</a>
@@ -356,60 +356,72 @@ body {
     
  
     <script>
+        // تعريف الرابط الخاص بـ API الذي يحتوي على المنتجات
+        const apiUrl = 'https://fakestoreapi.com/products'; 
     
-        const apiUrl = 'https://fakestoreapi.com/products'; // API endpoint to fetch products
-    
-            // Fetch products from API
-            async function fetchProducts() {
-                try {
-                    const response = await fetch(apiUrl);
-                    if (!response.ok) throw new Error('Failed to fetch');
-                    const products = await response.json();
-            
-                    // Render products and set up search functionality
-                    renderProducts(products);
-                    setupSearch(products);
-                } catch (error) {
-                    console.error("Error fetching products:", error);
-                    document.getElementById('product-grid').innerHTML = `<p>Failed to load products. Please try again later.</p>`;
-                }
+        // وظيفة لجلب المنتجات من API
+        async function fetchProducts() {
+            try {
+                // طلب جلب البيانات من API
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error('Failed to fetch'); // التحقق من نجاح الجلب
+                const products = await response.json(); // تحويل البيانات إلى JSON
+                
+                // عرض المنتجات وتفعيل وظيفة البحث
+                renderProducts(products); // استدعاء دالة عرض المنتجات
+                setupSearch(products); // استدعاء دالة إعداد البحث
+            } catch (error) {
+                // التعامل مع الأخطاء في حال فشل الجلب
+                console.error("Error fetching products:", error);
+                document.getElementById('product-grid').innerHTML = `<p>Failed to load products. Please try again later.</p>`; // عرض رسالة خطأ في حالة الفشل
             }
-            
-            // Render products in the grid
-            function renderProducts(products) {
-                const gridContainer = document.getElementById('product-grid');
-                gridContainer.innerHTML = products
-                    .map(
-                        (product) => `
+        }
+    
+        // دالة لعرض المنتجات داخل الشبكة
+        function renderProducts(products) {
+            const gridContainer = document.getElementById('product-grid'); // تحديد العنصر الذي يحتوي على المنتجات
+            gridContainer.innerHTML = products
+                .map(
+                    (product) => `
+                    <!-- إنشاء بطاقة لكل منتج -->
                     <div class="product-card">
+                        <!-- صورة المنتج -->
                         <img src="${product.image}" alt="${product.title}" class="product-image">
+                        
+                        <!-- تفاصيل المنتج -->
                         <div class="product-details">
-                            <h3 class="product-title">${product.title}</h3>
-                            <p class="product-price">$${product.price}</p>
-                            <p class="product-description">${product.description.slice(0, 100)}...</p>
+                            <h3 class="product-title">${product.title}</h3> <!-- عنوان المنتج -->
+                            <p class="product-price">$${product.price}</p> <!-- سعر المنتج -->
+                            <p class="product-description">${product.description.slice(0, 100)}...</p> <!-- وصف المنتج مع اقتصاص النص -->
+                            
+                            <!-- زر لرؤية تفاصيل المنتج -->
                             <a href="details.html?id=${product.id}" class="view-details-btn">View Details</a>
                         </div>
                     </div>
                 `
-                    )
-                    .join('');
-            }
-            
-            // Setup search functionality
-            function setupSearch(products) {
-                const searchInput = document.getElementById('search-input');
-                searchInput.addEventListener('input', (event) => {
-                    const searchTerm = event.target.value.toLowerCase();
-                    const filteredProducts = products.filter((product) =>
-                        product.title.toLowerCase().includes(searchTerm)
-                    );
-                    renderProducts(filteredProducts);
-                });
-            }
-            
-            // Load products on page load
-            window.addEventListener('DOMContentLoaded', fetchProducts);
-            </script>
+                )
+                .join(''); // تحويل المصفوفة إلى سلسلة نصوص HTML
+        }
+    
+
+
+        // دالة لإعداد وظيفة البحث
+        function setupSearch(products) {
+            const searchInput = document.getElementById('search-input'); // تحديد حقل الإدخال الخاص بالبحث
+            searchInput.addEventListener('input', (event) => {
+                const searchTerm = event.target.value.toLowerCase(); // تحويل النص المُدخل إلى أحرف صغيرة
+                // تصفية المنتجات بناءً على النص المُدخل
+                const filteredProducts = products.filter((product) =>
+                    product.title.toLowerCase().includes(searchTerm) // التحقق إذا كان عنوان المنتج يحتوي على النص
+                );
+                renderProducts(filteredProducts); // عرض المنتجات التي تطابق البحث
+            });
+        }
+    
+        // تحميل المنتجات عند تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', fetchProducts); // استدعاء وظيفة جلب المنتجات عند اكتمال تحميل DOM
+    </script>
+    
 </body>
 
 </html>

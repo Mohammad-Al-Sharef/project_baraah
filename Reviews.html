@@ -9,8 +9,8 @@
     <style>
 
 body {
-    font-family: 'Poppins', sans-serif; /* خط عصري */
-    background-color: #34495e; /* لون خلفية ناعم */
+    font-family: 'Poppins', sans-serif; 
+    background-color:#ddd; 
     margin: 0;
     padding: 0;
     color: #333;
@@ -150,6 +150,39 @@ body {
         padding: 8px 12px;
     }
 }
+#pendingMessagesContainer {
+    /* تمكين التمرير العمودي */
+    overflow-y: auto;
+
+    /* تعيين الحد الأقصى للارتفاع */
+    max-height: 400px;
+
+    /* إضافة تصميم للتمرير */
+    scrollbar-width: thin; /* لتصميم التمرير في متصفح فايرفوكس */
+    scrollbar-color: #4EA27A #f5f5f5;
+
+    /* حواف وتصميم الحاوية */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* تصميم شريط التمرير لمتصفح Chrome و Edge */
+#pendingMessagesContainer::-webkit-scrollbar {
+    width: 8px; /* عرض شريط التمرير */
+    height: 8px; /* ارتفاع شريط التمرير الأفقي إذا كان موجودًا */
+}
+
+#pendingMessagesContainer::-webkit-scrollbar-thumb {
+    background-color: #4EA27A; /* لون شريط التمرير */
+    border-radius: 4px; /* حواف مستديرة */
+}
+
+#pendingMessagesContainer::-webkit-scrollbar-track {
+    background-color: #f5f5f5; /* لون خلفية التمرير */
+}
 
     </style>
 </head>
@@ -162,73 +195,86 @@ body {
         </div>
     </section>
     <script>
-
-function loadPendingMessages() {
-    const messages = JSON.parse(localStorage.getItem("messages")) || [];
-    const container = document.getElementById("pendingMessagesContainer");
-
-    const pendingMessages = messages.filter((msg) => msg.status === "Pending");
-
-    if (pendingMessages.length === 0) {
-        container.innerHTML = "<p class='no-reviews'>No pending reviews.</p>";
-        return;
+    // وظيفة لتحميل الرسائل المعلقة من localStorage وعرضها في الصفحة
+    function loadPendingMessages() {
+        const messages = JSON.parse(localStorage.getItem("messages")) || []; // استرجاع الرسائل من localStorage أو تهيئة مصفوفة فارغة
+        const container = document.getElementById("pendingMessagesContainer"); // حاوية عرض الرسائل المعلقة
+    
+        // تصفية الرسائل للحصول على الرسائل ذات الحالة "Pending" فقط
+        const pendingMessages = messages.filter((msg) => msg.status === "Pending");
+    
+        // التحقق إذا لم تكن هناك رسائل معلقة
+        if (pendingMessages.length === 0) {
+            container.innerHTML = "<p class='no-reviews'>No pending reviews.</p>"; // عرض رسالة تفيد بعدم وجود مراجعات
+            return;
+        }
+    
+        // عرض الرسائل المعلقة داخل الحاوية مع إضافة خاصية التمرير
+        container.innerHTML = pendingMessages
+            .map(
+                (msg) => `
+            <div class="message-card" id="message-${msg.id}">
+                <h4>${msg.name} (${msg.email})</h4>
+                <p>${msg.message}</p>
+                <small>Sent on: ${msg.date}</small>
+                <button class="accept-button" onclick="approveMessage(${msg.id})">Accept</button>
+                <button class="reject-button" onclick="rejectMessage(${msg.id})">Reject</button>
+            </div>
+        `
+            )
+            .join("");
+    
+        // تفعيل خاصية التمرير للرسائل عند تجاوز عدد معين
+        container.style.overflowY = "auto"; // تفعيل التمرير العمودي
+        container.style.maxHeight = "400px"; // تحديد الحد الأقصى للارتفاع
     }
-
-    container.innerHTML = pendingMessages
-        .map(
-            (msg) => `
-        <div class="message-card" id="message-${msg.id}">
-            <h4>${msg.name} (${msg.email})</h4>
-            <p>${msg.message}</p>
-            <small>Sent on: ${msg.date}</small>
-            <button class="accept-button" onclick="approveMessage(${msg.id})">Accept</button>
-            <button class="reject-button" onclick="rejectMessage(${msg.id})">Reject</button>
-        </div>
-    `
-        )
-        .join("");
-}
-
-function approveMessage(id) {
-    const messages = JSON.parse(localStorage.getItem("messages")) || [];
-    const updatedMessages = messages.map((msg) =>
-        msg.id === id ? { ...msg, status: "Approved" } : msg
-    );
-
-    localStorage.setItem("messages", JSON.stringify(updatedMessages));
-
-    Swal.fire({
-        icon: 'success',
-        title: 'Message Approved!',
-        text: 'The review has been approved successfully.',
-        background: '#f5f5f5',
-        color: '#4EA27A',
-        confirmButtonColor: '#4EA27A',
-    }).then(() => {
-        loadPendingMessages();
-    });
-}
-
-function rejectMessage(id) {
-    const messages = JSON.parse(localStorage.getItem("messages")) || [];
-    const updatedMessages = messages.filter((msg) => msg.id !== id);
-
-    localStorage.setItem("messages", JSON.stringify(updatedMessages));
-
-    Swal.fire({
-        icon: 'success',
-        title: 'Message Rejected!',
-        text: 'The review has been rejected successfully.',
-        background: '#f5f5f5',
-        color: '#cc0000',
-        confirmButtonColor: '#cc0000',
-    }).then(() => {
-        loadPendingMessages();
-    });
-}
-
-window.addEventListener("DOMContentLoaded", loadPendingMessages);
-
-    </script>
+    
+    // وظيفة للموافقة على الرسالة المعلقة
+    function approveMessage(id) {
+        const messages = JSON.parse(localStorage.getItem("messages")) || []; // استرجاع الرسائل من localStorage
+        // تحديث حالة الرسالة إلى "Approved"
+        const updatedMessages = messages.map((msg) =>
+            msg.id === id ? { ...msg, status: "Approved" } : msg
+        );
+    
+        localStorage.setItem("messages", JSON.stringify(updatedMessages)); // تخزين الرسائل المحدثة في localStorage
+    
+        // إظهار تنبيه بالموافقة باستخدام مكتبة SweetAlert
+        Swal.fire({
+            icon: 'success', // أيقونة النجاح
+            title: 'Message Approved!', // عنوان التنبيه
+            text: 'The review has been approved successfully.', // نص الرسالة
+            background: '#f5f5f5', // خلفية التنبيه
+            color: '#4EA27A', // لون النص
+            confirmButtonColor: '#4EA27A', // لون زر التأكيد
+        }).then(() => {
+            loadPendingMessages(); // إعادة تحميل الرسائل بعد التحديث
+        });
+    }
+    
+    // وظيفة لرفض الرسالة المعلقة
+    function rejectMessage(id) {
+        const messages = JSON.parse(localStorage.getItem("messages")) || []; // استرجاع الرسائل من localStorage
+        // حذف الرسالة المرفوضة من القائمة
+        const updatedMessages = messages.filter((msg) => msg.id !== id);
+    
+        localStorage.setItem("messages", JSON.stringify(updatedMessages)); // تخزين الرسائل المحدثة في localStorage
+    
+        // إظهار تنبيه بالرفض باستخدام مكتبة SweetAlert
+        Swal.fire({
+            icon: 'success', // أيقونة النجاح
+            title: 'Message Rejected!', // عنوان التنبيه
+            text: 'The review has been rejected successfully.', // نص الرسالة
+            background: '#f5f5f5', // خلفية التنبيه
+            color: '#cc0000', // لون النص
+            confirmButtonColor: '#cc0000', // لون زر التأكيد
+        }).then(() => {
+            loadPendingMessages(); // إعادة تحميل الرسائل بعد التحديث
+        });
+    }
+    
+    // تحميل الرسائل المعلقة عند تحميل الصفحة
+    window.addEventListener("DOMContentLoaded", loadPendingMessages);
+</script>    
 </body>
 </html>

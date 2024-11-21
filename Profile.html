@@ -57,7 +57,7 @@
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
         .button_back:hover {
-            background-color: #727880;
+            background-color:#f5a623;
             transform: scale(1.05);
         }
         .modal {
@@ -187,35 +187,41 @@
 </div>
 
 <script>
-    function showModal() {
-        document.getElementById('editModal').style.display = 'flex';
+    // وظيفة لعرض النافذة المنبثقة (المودال) للتعديل
+function showModal() {
+    document.getElementById('editModal').style.display = 'flex'; // تغيير طريقة عرض المودال إلى 'flex' لجعله مرئيًا
+}
+
+// وظيفة لحفظ التعديلات على بيانات الملف الشخصي
+function saveProfile() {
+    // الحصول على القيم المدخلة في حقول النموذج داخل المودال
+    const name = document.getElementById('modalName').value; // اسم المستخدم
+    const age = document.getElementById('modalAge').value; // العمر
+    const location = document.getElementById('modalLocation').value; // الموقع الجغرافي
+    const occupation = document.getElementById('modalOccupation').value; // الوظيفة
+    const email = document.getElementById('modalEmail').value; // البريد الإلكتروني
+    const phone = document.getElementById('modalPhone').value; // رقم الهاتف
+
+    // التحقق من أن جميع الحقول قد تم تعبئتها
+    if (name && age && location && occupation && email && phone) {
+        // تحديث عناصر الصفحة الرئيسية بقيم الحقول الجديدة
+        document.getElementById('name').textContent = name; // تحديث اسم المستخدم
+        document.getElementById('ageInfo').innerHTML = `<strong>Age:</strong> ${age}`; // تحديث العمر
+        document.getElementById('locationInfo').innerHTML = `<strong>Location:</strong> ${location}`; // تحديث الموقع
+        document.getElementById('occupationInfo').innerHTML = `<strong>Occupation:</strong> ${occupation}`; // تحديث الوظيفة
+        document.getElementById('emailInfo').innerHTML = `<strong>Email:</strong> ${email}`; // تحديث البريد الإلكتروني
+        document.getElementById('phoneInfo').innerHTML = `<strong>Phone:</strong> ${phone}`; // تحديث رقم الهاتف
     }
 
-    function saveProfile() {
-        const name = document.getElementById('modalName').value;
-        const age = document.getElementById('modalAge').value;
-        const location = document.getElementById('modalLocation').value;
-        const occupation = document.getElementById('modalOccupation').value;
-        const email = document.getElementById('modalEmail').value;
-        const phone = document.getElementById('modalPhone').value;
+    // إغلاق النافذة المنبثقة (المودال) بعد حفظ التعديلات
+    document.getElementById('editModal').style.display = 'none';
+}
 
-        if (name && age && location && occupation && email && phone) {
-            document.getElementById('name').textContent = name;
-            document.getElementById('ageInfo').innerHTML = `<strong>Age:</strong> ${age}`;
-            document.getElementById('locationInfo').innerHTML = `<strong>Location:</strong> ${location}`;
-            document.getElementById('occupationInfo').innerHTML = `<strong>Occupation:</strong> ${occupation}`;
-            document.getElementById('emailInfo').innerHTML = `<strong>Email:</strong> ${email}`;
-            document.getElementById('phoneInfo').innerHTML = `<strong>Phone:</strong> ${phone}`;
-        }
+// وظيفة للتنقل إلى صفحة "الصفحة الرئيسية" عند الضغط على زر معين
+function goHome() {
+    window.location.href = 'home.html'; // تغيير عنوان الرابط لفتح صفحة "home.html"
+}
 
-        // Close the modal
-        document.getElementById('editModal').style.display = 'none';
-    }
-
-    function goHome() {
-        window.location.href = 'home.html';
-    }
 </script>
-
 </body>
 </html>

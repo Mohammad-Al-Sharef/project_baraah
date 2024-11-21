@@ -22,7 +22,7 @@
             <li><a href="#about">About Us</a></li>
             <li><a href="#categories">Categories</a></li>
             <li><a href="#Partners">Our Trusted Partners</a></li>
-            <li><a href="#Reviews">Reviews</a></li>
+            <li><a href="view-products.html">view product</a></li>
             <li><a href="#Contact">Contact Us</a></li>
         </ul>
         <a href="login-sinup.html" class="login-btn">Login</a>
@@ -38,7 +38,7 @@
             <h1>DigitalMart</h1>
             <p>Welcome to DigitalMart ......</p>
             <p> your trusted site for comprehensive reviews of the latest electronics.</p>
-            <a href="#categories" class="explore-btn">Explore Now</a>
+            <a href="Explore-Now.html" class="explore-btn">Explore Now</a>
 
         </div>
     </header>
@@ -184,105 +184,25 @@
     
     <script>
 
+   
+        
+        // عند تحميل الصفحة، يتم تفعيل الرسوم المتحركة لبطاقات التصنيفات
+        document.addEventListener("DOMContentLoaded", () => {
+            const categoryCards = document.querySelectorAll('.category-card'); // تحديد جميع بطاقات التصنيفات
+            
+            categoryCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('show'); // إضافة صنف CSS لتفعيل الرسوم المتحركة
+                }, index * 500); // تأخير تفعيل كل بطاقة بمقدار 500 مللي ثانية
+            });
+        });
+        
+       // التأكد أن السكربت تم تحميله وتشغيله
+console.log("Script Loaded");
 
 
-   document.querySelector('.explore-btn').addEventListener('click', function(e) {
-    e.preventDefault();
-    document.querySelector('#categories').scrollIntoView({
-        behavior: 'smooth'
-    });
-});
-
-    // Categories
-
-//     Optional - Add interactive functionality here if needed.
-document.querySelectorAll('.read-btn').forEach(button => {
-    button.addEventListener('click', function() {
-        // alert('You clicked Read!');
-    });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-    const categoryCards = document.querySelectorAll('.category-card');
-    
-    categoryCards.forEach((card, index) => {
-        setTimeout(() => {
-            card.classList.add('show'); // Add the 'show' class to trigger animation
-        }, index * 300); // Delay each card's animation by 300ms
-    });
-});
-
-
-
-console.log("Script Loaded"); // التحقق أن الكود يعمل
-
-
-document.getElementById("contactForm").addEventListener("submit", function (e) {
-    e.preventDefault(); // منع إعادة تحميل الصفحة
-    console.log("Form submitted"); // تحقق أن الحدث يعمل
-
-    // الحصول على بيانات النموذج
-    const name = e.target.name.value.trim();
-    const email = e.target.email.value.trim();
-    const message = e.target.message.value.trim();
-
-    // تحقق من البيانات
-    if (!name || !email || !message) {
-        alert("Please fill in all fields.");
-        return;
-    }
-
-    // إعداد الرسالة
-    const newMessage = {
-        id: Date.now(),
-        name,
-        email,
-        message,
-        date: new Date().toLocaleString(),
-    };
-
-    // جلب الرسائل القديمة
-    const messages = JSON.parse(localStorage.getItem("messages")) || [];
-    messages.push(newMessage);
-
-    // تخزين الرسائل الجديدة
-    localStorage.setItem("messages", JSON.stringify(messages));
-    console.log("Message saved:", newMessage); // عرض الرسالة المخزنة في الـ console
-
-    // إعادة تعيين النموذج
-    e.target.reset();
-
-    alert("Message sent successfully!");
-    loadMessages(); // تحديث العرض مباشرة بعد الإرسال
-});
-
-// وظيفة لعرض الرسائل
-function loadMessages() {
-    const messages = JSON.parse(localStorage.getItem("messages")) || [];
-    const container = document.getElementById("messagesContainer");
-
-    if (messages.length === 0) {
-        container.innerHTML = "<p>No messages found.</p>";
-        return;
-    }
-
-    container.innerHTML = messages
-        .map(
-            (msg) => `
-        <div class="message-card">
-            <h4>${msg.name} (${msg.email})</h4>
-            <p>${msg.message}</p>
-            <small>Sent on: ${msg.date}</small>
-        </div>
-    `
-        )
-        .join("");
-}
-
-// تحميل الرسائل عند فتح الصفحة
-window.addEventListener("DOMContentLoaded", loadMessages);
-
-
-    </script>
+        
+        </script>
+        
 </body>
 </html>

@@ -463,6 +463,21 @@ section {
     margin-top: 10px; /* مسافة أعلى الزر */
     display: inline-block; /* لجعل الزر يظهر بشكل صحيح */
 }
+#messagesContainer {
+        max-height: 300px; /* ارتفاع ثابت لمنطقة عرض الرسائل */
+        overflow-y: scroll; /* تفعيل التمرير الرأسي عند امتلاء المحتوى */
+        border: 1px solid #ddd; /* إضافة إطار لتحسين المظهر (اختياري) */
+        padding: 10px; /* مسافة داخلية لتحسين التنسيق */
+        background-color: #f9f9f9; /* لون خلفية خفيف */
+    }
+
+    .message-card {
+        margin-bottom: 15px; /* مسافة بين كل رسالة */
+        padding: 10px; /* مساحة داخلية للبطاقة */
+        background-color: #fff; /* لون خلفية البطاقة */
+        border: 1px solid #ccc; /* إطار خفيف للبطاقة */
+        border-radius: 5px; /* زوايا دائرية للبطاقة */
+    }
 
 </style>
 <body>
@@ -478,7 +493,7 @@ section {
             <li><a href="#about">About Us</a></li>
             <li><a href="#categories">Categories</a></li>
             <li><a href="#Partners">Our Trusted Partners</a></li>
-            <li><a href="#Reviews">Reviews</a></li>
+            <li><a href="view-products.html">view product</a></li>
             <li><a href="#Contact">Contact Us</a></li>
         </ul>
         <a href="login-sinup.html" class="login-btn">Login</a>
@@ -697,78 +712,98 @@ section {
     </main>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    // إضافة مستمع لحدث الإرسال على الفورم مع تعريف وظيفة تعالج الإرسال
     document.getElementById("contactForm").addEventListener("submit", function (e) {
-        e.preventDefault(); // Prevent page reload
+        e.preventDefault(); // منع إعادة تحميل الصفحة عند الإرسال
 
-        const name = e.target.name.value.trim();
-        const email = e.target.email.value.trim();
-        const message = e.target.message.value.trim();
+        // الحصول على القيم المُدخلة في الحقول
+        const name = e.target.name.value.trim(); // اسم المستخدم
+        const email = e.target.email.value.trim(); // البريد الإلكتروني
+        const message = e.target.message.value.trim(); // الرسالة
 
+        // التحقق من تعبئة جميع الحقول
         if (!name || !email || !message) {
+            // عرض رسالة خطأ باستخدام SweetAlert إذا كان هناك حقل فارغ
             Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Please fill in all fields.',
-                background: '#f5f5f5',
-                color: '#333',
-                confirmButtonColor: '#3085d6',
+                icon: 'error', // أيقونة الخطأ
+                title: 'Error', // عنوان الرسالة
+                text: 'Please fill in all fields.', // نص الرسالة
+                background: '#f5f5f5', // لون خلفية الرسالة
+                color: '#333', // لون النص
+                confirmButtonColor: '#3085d6', // لون زر التأكيد
             });
-            return;
+            return; // إيقاف التنفيذ إذا كان هناك خطأ
         }
 
+        // إنشاء كائن جديد يحتوي على بيانات الرسالة
         const newMessage = {
-            id: Date.now(),
-            name,
-            email,
-            message,
-            date: new Date().toLocaleString(),
-            status: "Pending", // حالة المراجعة مبدئيًا
+            id: Date.now(), // إنشاء معرف فريد للرسالة باستخدام الوقت الحالي
+            name, // اسم المستخدم
+            email, // البريد الإلكتروني
+            message, // نص الرسالة
+            date: new Date().toLocaleString(), // تاريخ ووقت الإرسال
+            status: "Pending", // الحالة الافتراضية: قيد المراجعة
         };
 
+        // الحصول على جميع الرسائل المخزنة في localStorage
         const messages = JSON.parse(localStorage.getItem("messages")) || [];
+        // إضافة الرسالة الجديدة إلى القائمة
         messages.push(newMessage);
+        // تحديث البيانات في localStorage
         localStorage.setItem("messages", JSON.stringify(messages));
 
+        // إعادة تعيين الحقول إلى قيمها الافتراضية بعد الإرسال
         e.target.reset();
 
+        // عرض رسالة نجاح باستخدام SweetAlert
         Swal.fire({
-            icon: 'success',
-            title: 'Message Sent!',
-            text: 'Your message is awaiting admin approval.',
-            background: '#f5f5f5',
-            color: '#4EA27A',
-            confirmButtonColor: '#4EA27A',
+            icon: 'success', // أيقونة النجاح
+            title: 'Message Sent!', // عنوان الرسالة
+            text: 'Your message is awaiting admin approval.', // نص الرسالة
+            background: '#f5f5f5', // لون خلفية الرسالة
+            color: '#4EA27A', // لون النص
+            confirmButtonColor: '#4EA27A', // لون زر التأكيد
         });
     });
 
+    // وظيفة لتحميل الرسائل المعتمدة وعرضها في الصفحة
     function loadMessages() {
+        // استرجاع الرسائل من localStorage
         const messages = JSON.parse(localStorage.getItem("messages")) || [];
+        // تحديد العنصر الذي سيعرض الرسائل
         const container = document.getElementById("messagesContainer");
 
+        // تصفية الرسائل المعتمدة فقط (approved)
         const approvedMessages = messages.filter((msg) => msg.status === "Approved");
 
+        // التحقق إذا لم يكن هناك رسائل معتمدة لعرضها
         if (approvedMessages.length === 0) {
-            container.innerHTML = "<p>No approved reviews yet.</p>";
-            return;
+            container.innerHTML = "<p>No approved reviews yet.</p>"; // عرض رسالة تفيد بعدم وجود رسائل معتمدة
+            return; // إنهاء الوظيفة
         }
 
+        // عرض الرسائل المعتمدة في الصفحة
         container.innerHTML = approvedMessages
             .map(
                 (msg) => `
-            <div class="message-card" id="message-${msg.id}">
-                <h4>${msg.name} (${msg.email})</h4>
-                <p>${msg.message}</p>
-                <small>Sent on: ${msg.date}</small>
-            </div>
-        `
+                <!-- إنشاء بطاقة لكل رسالة -->
+                <div class="message-card" id="message-${msg.id}">
+                    <!-- اسم المرسل وعنوان البريد -->
+                    <h4>${msg.name} (${msg.email})</h4>
+                    <!-- نص الرسالة -->
+                    <p>${msg.message}</p>
+                    <!-- تاريخ الإرسال -->
+                    <small>Sent on: ${msg.date}</small>
+                </div>
+            `
             )
-            .join("");
+            .join(""); // دمج الرسائل مع بعضها في النص النهائي
     }
 
+    // استدعاء دالة تحميل الرسائل عند اكتمال تحميل الصفحة
     window.addEventListener("DOMContentLoaded", loadMessages);
 </script>
 
-  
 
 </body>
 
